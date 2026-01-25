@@ -1,0 +1,38 @@
+services:
+  namenode:
+    image: apache/hadoop:3
+    hostname: namenode
+    ports:
+      - "9870:9870" # Main NameNode Web UI port
+      - "8020:8020" # HDFS RPC port
+    env_file:
+      - ./config
+    environment:
+      ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+    command: ["hdfs", "namenode"]
+
+  datanode:
+    image: apache/hadoop:3
+    hostname: datanode
+    ports:
+      - "9864:9864"
+      - "9866:9866" # Puerto crucial para la transferencia de datos
+    env_file:
+      - ./config
+    command: ["hdfs", "datanode"]
+
+  resourcemanager:
+    image: apache/hadoop:3
+    hostname: resourcemanager
+    ports:
+      - "8088:8088" # YARN ResourceManager Web UI port
+    env_file:
+      - ./config
+    command: ["yarn", "resourcemanager"]
+
+  nodemanager:
+    image: apache/hadoop:3
+    hostname: nodemanager
+    env_file:
+      - ./config
+    command: ["yarn", "nodemanager"]
